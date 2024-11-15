@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-A CLI tool to fetch and display the size of a GitHub repository.
-"""
+
 
 import os
 import json
@@ -10,7 +8,7 @@ import subprocess
 import requests
 import argparse
 
-# Constants for configuration and colorized output
+
 
 TOKEN_FILE = os.path.expanduser('~/.github_token')  # Store the token in the home directory
 
@@ -22,37 +20,30 @@ COLORS = {
 }
 
 def load_token():
-    """Load the token from the persistent storage file in the home directory (~/.github_token)."""
+    #Load the token from the persistent storage file in the home directory (~/.github_token).
     if os.path.exists(TOKEN_FILE):
         with open(TOKEN_FILE, 'r') as f:
-            return f.read().strip()  # Read token and remove any surrounding whitespace
+            return f.read().strip() 
     return None
 
 def save_token(token):
-    """Save the token to the persistent storage file in the home directory (~/.github_token)."""
+    #Save the token to the persistent storage file in the home directory (~/.github_token).
     with open(TOKEN_FILE, 'w') as f:
         f.write(token)
     print(f"{COLORS['green']}GitHub API token saved successfully in {TOKEN_FILE}.{COLORS['reset']}")
 
 def set_token(token):
-    """Sets and saves the GitHub token to the global file."""
+    
     save_token(token)
     print(f"{COLORS['green']}API token saved successfully.{COLORS['reset']}")
 
 def update_token():
-    """Prompt the user to update the GitHub API token."""
+    
     new_token = input(f"{COLORS['green']}Enter your new GitHub API token: {COLORS['reset']}")
     set_token(new_token)
     print(f"{COLORS['green']}Token has been updated successfully!{COLORS['reset']}")
 
 def format_size(size_kb):
-    """
-    Formats the repository size in a human-readable format (KB, MB, GB).
-    Args:
-        size_kb (int): The size of the repository in kilobytes.
-    Returns:
-        str: The formatted size string.
-    """
     if size_kb < 1000:
         return f"{size_kb} KB"
     elif size_kb < 1000000:  # Less than 1 GB
@@ -63,12 +54,7 @@ def format_size(size_kb):
         return f"{size_gb:.2f} GB"
 
 def get_repo_size(owner, repo):
-    """
-    Fetch the size of a GitHub repository.
-    Args:
-        owner (str): The repository owner.
-        repo (str): The repository name.
-    """
+
     token = load_token()  # Load the token from the global file
 
     if not token:
@@ -102,7 +88,6 @@ def get_repo_size(owner, repo):
         print(f"{COLORS['red']}Error fetching repository details: {e}{COLORS['reset']}")
 
 def clone_repo(repo_url):
-    """Ask the user if they want to clone the repository and perform cloning if confirmed."""
     answer = input(f"Do you want to clone the repository '{repo_url}'? (y/n): ").strip().lower()
     if answer == 'y':
         try:
@@ -117,13 +102,7 @@ def clone_repo(repo_url):
         print(f"{COLORS['red']}Invalid input. Please enter 'y' or 'n'.{COLORS['reset']}")
 
 def parse_repo_url(repo_url):
-    """
-    Parse the GitHub repository URL to extract owner and repo name.
-    Args:
-        repo_url (str): The GitHub repository URL.
-    Returns:
-        tuple: A tuple containing the owner and repo name, or None if invalid.
-    """
+
     if repo_url.startswith("https://github.com/") and repo_url.endswith(".git"):
         parts = repo_url.split('/')
         if len(parts) >= 5:
@@ -133,9 +112,9 @@ def parse_repo_url(repo_url):
     return None, None
 
 def main():
-    """
-    Main function to handle CLI arguments and workflow.
-    """
+    
+    # Main function to handle CLI arguments and workflow.
+    
     parser = argparse.ArgumentParser(
         description='A CLI tool to fetch and display the size of GitHub repositories.',
         epilog='Developed by Pezhvak with ❤️',
@@ -146,12 +125,12 @@ def main():
 
     args = parser.parse_args()
 
-    # If user wants to update the token, call update_token function
+   
     if args.update_token:
         update_token()
         return
 
-    token = load_token()  # Load the token from the global file
+    token = load_token() 
 
     if not token and args.set_token is None:
         print(f"{COLORS['red']}GitHub API token is not set. Please set the token first using '--set-token <TOKEN>'.{COLORS['reset']}")
@@ -161,7 +140,6 @@ def main():
         set_token(args.set_token)
         return
 
-    # Validate and parse the repository URL
     if args.repo_url:
         owner, repo = parse_repo_url(args.repo_url)
         if owner and repo:

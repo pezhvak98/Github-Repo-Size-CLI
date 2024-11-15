@@ -1,3 +1,0 @@
-[console_scripts]
-grs = github_repo_size:main
-
