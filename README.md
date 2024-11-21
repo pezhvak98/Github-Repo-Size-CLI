@@ -12,9 +12,15 @@ A simple CLI tool to fetch and display the size of a GitHub repository. This too
 
 ## Installation
 
-### Install the Tool and All Prerequisites
+## Install as Package from **pip** (recommended)
+```python
+pip install github-repo-size-cli
+```
+or 
 
-To install this tool and all the required dependencies, simply run the installation script:
+### Install the Tool and All Prerequisites using Source Code
+
+To install this tool and all the required dependencies after cloning, simply run the installation script:
 
 ```bash
 chmod +x install.sh
